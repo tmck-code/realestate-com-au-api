@@ -74,11 +74,7 @@ class RealestateComAu(Fajita):
             query_variables = {
                 "channel": channel,
                 "page": page,
-                "pageSize": (
-                    min(limit, self._MAX_SEARCH_PAGE_SIZE)
-                    if limit
-                    else self._DEFAULT_SEARCH_PAGE_SIZE
-                ),
+                "pageSize": self._DEFAULT_SEARCH_PAGE_SIZE,
                 "localities": [{"searchLocation": location} for location in locations],
                 "filters": {
                     "surroundingSuburbs": surrounding_suburbs,
