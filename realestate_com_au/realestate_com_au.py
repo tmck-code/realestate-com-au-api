@@ -174,13 +174,6 @@ class RealestateComAu(Fajita):
             return kwargs
 
         def is_done(items, res, **kwargs):
-            if not items:
-                return True
-            if limit > -1:
-                if kwargs["total"] >= limit:
-                    self.pbar.close()
-                    return True
-
             data = res.json()
             results = (
                 data.get("data", {}).get(f"{channel}Search", {}).get("results", {})
@@ -188,9 +181,10 @@ class RealestateComAu(Fajita):
             total = results.get("totalResultsCount")
             if self.pbar is None:
                 self.pbar = tqdm(total=total)
+
             self.pbar.update(len(items))
 
-            if kwargs["total"] >= total:
+            if not items or kwargs["total"] >= total or (limit > -1 and kwargs["total"] >= limit):
                 self.pbar.close()
                 return True
 
