@@ -178,7 +178,7 @@ class RealestateComAu(Fajita):
                 return True
             if limit > -1:
                 if kwargs["total"] >= limit:
-                self.pbar.close()
+                    self.pbar.close()
                     return True
 
             data = res.json()
