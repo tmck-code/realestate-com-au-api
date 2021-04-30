@@ -15,8 +15,7 @@ class Listing:
     short_address: str
     full_address: str
     property_type: str
-    price: int
-    price_type: str
+    prices: dict
     bedrooms: int
     bathrooms: int
     parking_spaces: int
@@ -79,6 +78,17 @@ def parse_description(description):
     # return description.replace("<br/>", "\n")
     return description
 
+def parse_prices(listing):
+    prices = {
+        "BuyPrice": {"text": "", "value": None},
+        "SoldPrice": {"text": "", "value": None},
+    }
+    price_text = listing.get("price", {}).get("display", "")
+    prices[listing["price"]["__typename"]] = {
+        "text": price_text,
+        "value": parse_price_text(price_text),
+    }
+    return prices
 
 def get_lister(lister):
     lister = delete_nulls(lister)
@@ -127,9 +137,7 @@ def get_listing(listing):
     building_size_unit = property_sizes.get("building", {}).get("sizeUnit", {}).get("displayValue")
     land_size = property_sizes.get("land", {}).get("displayValue")
     land_size_unit = property_sizes.get("land", {}).get("sizeUnit", {}).get("displayValue")
-    price_text = listing.get("price", {}).get("display", "")
-    price = parse_price_text(price_text)
-    price_type = listing.get("price", {}).get("__typename", "")
+    prices = parse_prices(listing)
     sold_date = listing.get("dateSold", {}).get("display")
     auction = listing.get("auction", {}) or {}
     auction_date = auction.get("dateTime", {}).get("value")
@@ -157,8 +165,7 @@ def get_listing(listing):
         building_size_unit=building_size_unit,
         land_size=land_size,
         land_size_unit=land_size_unit,
-        price=price,
-        price_type=price_type,
+        prices=prices,
         auction_date=auction_date,
         sold_date=sold_date,
         description=description,
