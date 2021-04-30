@@ -34,7 +34,6 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     install_requires=[
         "requests",
-        "fajita @ git+https://github.com/tomquirk/fajita@7b08d59"
     ],
     classifiers=(
         "Programming Language :: Python :: 3",
