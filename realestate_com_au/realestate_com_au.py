@@ -173,9 +173,8 @@ class RealestateComAu(Fajita):
         def is_done(items, res, **kwargs):
             if not items:
                 return True
-            items_count = len(items)
             if limit > -1:
-                if items_count >= limit:
+                if kwargs["total"] >= limit:
                     return True
 
             data = res.json()
@@ -184,7 +183,7 @@ class RealestateComAu(Fajita):
             )
             total = results.get("totalResultsCount")
 
-            if items_count >= total:
+            if kwargs["total"] >= total:
                 return True
 
             pagination = results.get("pagination")
