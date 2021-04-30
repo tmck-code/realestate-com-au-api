@@ -7,7 +7,9 @@ from time import sleep
 from urllib.parse import urlencode
 import json
 import re
+
 from fajita import Fajita
+from tqdm import tqdm
 
 import realestate_com_au.settings as settings
 from realestate_com_au.graphql import searchBuy, searchRent, searchSold
@@ -45,6 +47,7 @@ class RealestateComAu(Fajita):
         )
         logging.basicConfig(level=logging.DEBUG if debug else logging.INFO)
         self.logger = logger
+        self.pbar = None
 
     def search(
         self,
@@ -182,6 +185,9 @@ class RealestateComAu(Fajita):
                 data.get("data", {}).get(f"{channel}Search", {}).get("results", {})
             )
             total = results.get("totalResultsCount")
+            if self.pbar is None:
+                self.pbar = tqdm(total)
+            tqdm.update(len(items))
 
             if kwargs["total"] >= total:
                 return True
