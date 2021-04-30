@@ -186,7 +186,7 @@ class RealestateComAu(Fajita):
             )
             total = results.get("totalResultsCount")
             if self.pbar is None:
-                self.pbar = tqdm(total)
+                self.pbar = tqdm(total=total)
             self.pbar.update(len(items))
 
             if kwargs["total"] >= total:
