@@ -195,7 +195,7 @@ class RealestateComAu(Fajita):
 
             return False
 
-        listings = self._scroll(
+        yield from self._scroll_yield(
             "",
             "POST",
             parse_items,
@@ -203,5 +203,3 @@ class RealestateComAu(Fajita):
             is_done,
             json=get_payload(get_query_variables(1)),
         )
-
-        return listings
