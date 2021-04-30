@@ -180,7 +180,7 @@ class RealestateComAu(Fajita):
             )
             total = results.get("totalResultsCount")
             if self.pbar is None:
-                self.pbar = tqdm(total=total if limit < 0 else limit, smoothing=0)
+                self.pbar = tqdm(total=total if limit < 0 else limit)
 
             self.pbar.update(len(items))
 
