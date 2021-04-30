@@ -83,6 +83,8 @@ def parse_prices(listing):
         "BuyPrice": {"text": "", "value": None},
         "SoldPrice": {"text": "", "value": None},
     }
+    if price not in listing:
+        return prices
     price_text = listing.get("price", {}).get("display", "")
     prices[listing["price"]["__typename"]] = {
         "text": price_text,
