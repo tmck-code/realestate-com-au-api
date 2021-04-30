@@ -6,6 +6,7 @@ from realestate_com_au.utils import delete_nulls
 @dataclass
 class Listing:
     id: str
+    raw: dict
     url: str
     suburb: str
     state: str
@@ -133,6 +134,7 @@ def get_listing(listing):
 
     return Listing(
         id=property_id,
+        raw=listing,
         url=url,
         suburb=suburb,
         state=state,
