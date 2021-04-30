@@ -6,6 +6,7 @@ from realestate_com_au.utils import delete_nulls
 @dataclass
 class Listing:
     id: str
+    listing_type: str
     raw: dict
     url: str
     suburb: str
@@ -15,6 +16,7 @@ class Listing:
     full_address: str
     property_type: str
     price: int
+    price_type: str
     bedrooms: int
     bathrooms: int
     parking_spaces: int
@@ -103,6 +105,7 @@ def get_listing(listing):
     # delete null keys for convenience
 
     property_id = listing.get("id")
+    listing_type = listing.get("raw", {}).get("__typename", "")
     url = listing.get("_links", {}).get("canonical", {}).get("href")
     address = listing.get("address", {})
     suburb = address.get("suburb")
@@ -126,6 +129,7 @@ def get_listing(listing):
     land_size_unit = property_sizes.get("land", {}).get("sizeUnit", {}).get("displayValue")
     price_text = listing.get("price", {}).get("display", "")
     price = parse_price_text(price_text)
+    price_type = listing.get("price", {}).get("__typename", "")
     sold_date = listing.get("dateSold", {}).get("display")
     auction = listing.get("auction", {}) or {}
     auction_date = auction.get("dateTime", {}).get("value")
@@ -134,6 +138,7 @@ def get_listing(listing):
 
     return Listing(
         id=property_id,
+        listing_type=listing_type,
         raw=listing,
         url=url,
         suburb=suburb,
@@ -153,6 +158,7 @@ def get_listing(listing):
         land_size=land_size,
         land_size_unit=land_size_unit,
         price=price,
+        price_type=price_type,
         auction_date=auction_date,
         sold_date=sold_date,
         description=description,
